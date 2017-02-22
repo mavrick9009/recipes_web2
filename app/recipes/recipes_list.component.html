@@ -1,0 +1,16 @@
+<div class="recipes-list">
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let recipe of recipes">
+      <a [routerLink]="['/recipes', recipe.id]">
+        <div class="col-md-6">
+          <img *ngIf="recipe.image" src="http://localhost:3000{{recipe.image}}"/>
+        </div>
+        <div class="col-md-6">
+          <h1>{{recipe.name}}</h1>
+          <p>{{recipe.description}}</p>
+        </div>
+        <div class="clearfix"></div>
+      </a>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,13 @@
+<div *ngIf="error">
+  <h2 class="danger">{{error}}</h2>
+</div>
+<div *ngIf="recipe">
+      <div class="col-md-6">
+        <img src="http://localhost:3000{{recipe.image}}"/>
+      </div>
+      <div class="col-md-6">
+        <h1>{{recipe.name}}</h1>
+        <p>{{recipe.description}}</p>
+      </div>
+      <div class="clearfix"></div>
+</div>
