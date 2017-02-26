@@ -1,0 +1,38 @@
+<div *ngIf="error">
+  <h2 class="danger">{{error}}</h2>
+</div>
+<div *ngIf="recipe">
+      <div class="well">
+        <div class="col-md-6">
+          <img src="http://localhost:3000{{recipe.image}}"/>
+        </div>
+        <div class="col-md-6">
+          <button *ngIf="recipe" class="btn btn-info edit-recipe" [routerLink]="['/recipes',recipe.id,'edit']" >edit</button>
+          <h1>{{recipe.name}}</h1>
+          <p>{{recipe.description}}</p>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="recipe_steps panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <div class="panel panel-default" *ngFor="let step of recipe.steps; let i=index" >
+            <div class="panel-heading" role="tab" id="heading{{index}}">
+              <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{i}}" aria-expanded="true" [attr.aria-controls]="'collapse'+i">
+                  {{step.name}}
+                </a>
+              </h4>
+            </div>
+            <div id="collapse{{i}}" class="panel-collapse collapse" role="tabpanel" >
+              <div class="panel-body">
+                <div class="col-md-4">
+                  <img src="http://localhost:3000{{step.image}}"/>
+                </div>
+                <div class="col-md-8">
+                  <p>{{step.description}}</p>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+      </div>
+</div>

@@ -11,13 +11,11 @@ var http_1 = require("@angular/http");
 var forms_1 = require("@angular/forms");
 var app_routing_1 = require("./app.routing");
 var app_component_1 = require("./app.component");
-var user_service_1 = require("./shared/services/user.service");
-var recipe_service_1 = require("./shared/services/recipe.service");
-var users_component_1 = require("./users/users.component");
-var recipes_component_1 = require("./recipes/recipes.component");
-var recipes_list_component_1 = require("./recipes/recipes_list.component");
-var recipes_detail_component_1 = require("./recipes/recipes_detail.component");
+var Services = require("./shared/services/index");
+var Users = require("./users/index");
+var Recipes = require("./recipes/index");
 var home_component_1 = require("./home/home.component");
+var session_component_1 = require("./session/session.component");
 var header_component_1 = require("./common/header.component");
 require("rxjs/add/operator/map");
 require("rxjs/add/operator/toPromise");
@@ -37,16 +35,21 @@ AppModule = __decorate([
         ],
         declarations: [
             app_component_1.AppComponent,
-            users_component_1.UsersComponent,
+            Users.UsersComponent,
+            Users.UserEditComponent,
             home_component_1.HomeComponent,
+            session_component_1.SessionComponent,
             header_component_1.HeaderComponent,
-            recipes_component_1.RecipesComponent,
-            recipes_list_component_1.RecipesListComponent,
-            recipes_detail_component_1.RecipesDetailComponent
+            Recipes.RecipesComponent,
+            Recipes.RecipesListComponent,
+            Recipes.RecipesDetailComponent,
+            Recipes.RecipesEditComponent,
+            Recipes.RecipesStepComponent
         ],
         providers: [
-            user_service_1.UserService,
-            recipe_service_1.RecipeService
+            Services.UserService,
+            Services.RecipeService,
+            Services.AuthenticationService
         ],
         bootstrap: [app_component_1.AppComponent]
     })

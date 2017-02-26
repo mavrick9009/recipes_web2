@@ -11,16 +11,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 var Observable_1 = require("rxjs/Observable");
+var user_1 = require("../models/user");
 var UserService = (function () {
     function UserService(http) {
         this.http = http;
-        this.usersUrl = 'http://reqres.in/api/users';
+        this.apiUrl = 'http://localhost:3000/api/users/';
     }
+    UserService.prototype.getCurrentUser = function () {
+        var currentUser = new user_1.User(JSON.parse(localStorage.getItem('currentUser')));
+        return currentUser;
+    };
     /**
      * Get all users
      */
     UserService.prototype.getUsers = function () {
-        return this.http.get(this.usersUrl)
+        return this.http.get(this.apiUrl)
             .map(function (res) { return res.json().data; })
             .catch(this.handleError);
     };
@@ -34,6 +39,18 @@ var UserService = (function () {
     };
     // create a user
     // update a user
+    UserService.prototype.updateUser = function (userInfo) {
+        return this.http.put(this.apiUrl + userInfo.id, { user: userInfo }, this.jwt())
+            .map(function (response) {
+            // login successful if there's a jwt token in the response
+            var user = response.json();
+            if (user && user.token) {
+                // store user details and jwt token in local storage to keep user logged in between page refreshes
+                localStorage.setItem('currentUser', JSON.stringify(user));
+            }
+        })
+            .catch(this.handleError);
+    };
     // delete a user
     /**
      * Handle any errors from the API
@@ -49,6 +66,14 @@ var UserService = (function () {
             errMessage = err.message ? err.message : err.toString();
         }
         return Observable_1.Observable.throw(errMessage);
+    };
+    UserService.prototype.jwt = function () {
+        // create authorization header with jwt token
+        var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser && currentUser.token) {
+            var headers = new http_1.Headers({ 'Authorization': currentUser.token });
+            return new http_1.RequestOptions({ headers: headers });
+        }
     };
     return UserService;
 }());

@@ -5,13 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { routing } from './app.routing';
 import { AppComponent } from './app.component';
 
-import { UserService } from './shared/services/user.service';
-import { RecipeService } from './shared/services/recipe.service';
-import { UsersComponent } from './users/users.component';
-import { RecipesComponent } from './recipes/recipes.component';
-import { RecipesListComponent } from './recipes/recipes_list.component';
-import { RecipesDetailComponent } from './recipes/recipes_detail.component';
+import * as Services from './shared/services/index';
+import * as Users from './users/index';
+import * as Recipes from "./recipes/index";
 import { HomeComponent } from './home/home.component';
+import { SessionComponent } from './session/session.component';
 import { HeaderComponent } from './common/header.component';
 
 import 'rxjs/add/operator/map';
@@ -27,16 +25,21 @@ import 'rxjs/add/operator/catch';
   ],
   declarations: [
     AppComponent,
-    UsersComponent,
+    Users.UsersComponent,
+    Users.UserEditComponent,
     HomeComponent,
+    SessionComponent,
     HeaderComponent,
-    RecipesComponent,
-    RecipesListComponent,
-    RecipesDetailComponent
+    Recipes.RecipesComponent,
+    Recipes.RecipesListComponent,
+    Recipes.RecipesDetailComponent,
+    Recipes.RecipesEditComponent,
+    Recipes.RecipesStepComponent
   ],
   providers: [
-    UserService,
-    RecipeService
+    Services.UserService,
+    Services.RecipeService,
+    Services.AuthenticationService
   ],
   bootstrap: [ AppComponent ]
 })

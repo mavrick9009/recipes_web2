@@ -15,25 +15,30 @@ require("rxjs/add/observable/throw");
 var RecipeService = (function () {
     function RecipeService(http) {
         this.http = http;
-        this.recipesUrl = 'http://localhost:3000/api/recipes/';
+        this.apiUrl = 'http://localhost:3000/api/recipes/';
     }
     /**
      * Get all recipes
      */
     RecipeService.prototype.getRecipes = function () {
-        return this.http.get(this.recipesUrl)
+        return this.http.get(this.apiUrl)
             .map(function (res) { return res.json(); });
     };
     /**
      * Get a single user
      */
     RecipeService.prototype.getRecipe = function (id) {
-        return this.http.get(this.recipesUrl + id)
+        return this.http.get(this.apiUrl + id, this.jwt())
             .map(function (res) { return res.json(); })
             .catch(this.handleError);
     };
     // create a user
-    // update a user
+    // update a recipe
+    RecipeService.prototype.updateRecipe = function (recipe) {
+        return this.http.put(this.apiUrl + recipe.id, { recipe: recipe }, this.jwt())
+            .map(function (res) { return res.json(); })
+            .catch(this.handleError);
+    };
     // delete a user
     /**
      * Handle any errors from the API
@@ -58,6 +63,14 @@ var RecipeService = (function () {
             description: recipe.description,
             image: recipe.image
         };
+    };
+    RecipeService.prototype.jwt = function () {
+        // create authorization header with jwt token
+        var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser && currentUser.token) {
+            var headers = new http_1.Headers({ 'Authorization': currentUser.token });
+            return new http_1.RequestOptions({ headers: headers });
+        }
     };
     return RecipeService;
 }());

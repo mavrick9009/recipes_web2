@@ -1,19 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Headers, RequestOptions, Response  } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { User } from '../models/user';
 
 @Injectable()
 export class UserService {
-  private usersUrl: string = 'http://reqres.in/api/users';
+  private apiUrl: string = 'http://localhost:3000/api/users/';
 
   constructor(private http: Http) {}
 
+  getCurrentUser() {
+    let currentUser = new User(JSON.parse(localStorage.getItem('currentUser')));
+    return currentUser;
+  }
   /**
    * Get all users
    */
   getUsers(): Observable<User[]> {
-    return this.http.get(this.usersUrl)
+    return this.http.get(this.apiUrl)
       .map(res => res.json().data)
       .catch(this.handleError);
   }
@@ -30,7 +34,18 @@ export class UserService {
   // create a user
 
   // update a user
-
+  updateUser(userInfo:User) {
+    return this.http.put(this.apiUrl+userInfo.id,{user: userInfo}, this.jwt())
+    .map((response: Response) => {
+        // login successful if there's a jwt token in the response
+        let user = response.json();
+        if (user && user.token) {
+            // store user details and jwt token in local storage to keep user logged in between page refreshes
+            localStorage.setItem('currentUser', JSON.stringify(user));
+        }
+    })
+    .catch(this.handleError);
+  }
   // delete a user
 
   /**
@@ -50,4 +65,12 @@ export class UserService {
     return Observable.throw(errMessage);
   }
 
+  jwt() {
+       // create authorization header with jwt token
+       let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+       if (currentUser && currentUser.token) {
+           let headers = new Headers({ 'Authorization':  currentUser.token });
+           return new RequestOptions({ headers: headers });
+       }
+   }
 }

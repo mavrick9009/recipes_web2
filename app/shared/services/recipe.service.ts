@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 import { Recipe } from '../models/recipe';
 
 @Injectable()
 export class RecipeService {
-  private recipesUrl: string = 'http://localhost:3000/api/recipes/';
+  private apiUrl: string = 'http://localhost:3000/api/recipes/';
 
   constructor(private http: Http) {}
 
@@ -14,7 +14,7 @@ export class RecipeService {
    * Get all recipes
    */
   getRecipes(): Observable<Recipe[]> {
-    return this.http.get(this.recipesUrl)
+    return this.http.get(this.apiUrl)
       .map(res => res.json());
   }
 
@@ -22,15 +22,20 @@ export class RecipeService {
    * Get a single user
    */
   getRecipe(id): Observable<Recipe>  {
-    return this.http.get(this.recipesUrl+id)
+    return this.http.get(this.apiUrl+id, this.jwt())
       .map(res => res.json())
       .catch(this.handleError);
   }
 
   // create a user
 
-  // update a user
+  // update a recipe
 
+  updateRecipe(recipe:Recipe) {
+    return this.http.put(this.apiUrl+recipe.id,{recipe: recipe}, this.jwt())
+    .map(res => res.json())
+    .catch(this.handleError);
+  }
   // delete a user
 
   /**
@@ -58,5 +63,12 @@ export class RecipeService {
       image: recipe.image
     };
   }
-
+  private jwt() {
+       // create authorization header with jwt token
+       let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+       if (currentUser && currentUser.token) {
+           let headers = new Headers({ 'Authorization':  currentUser.token });
+           return new RequestOptions({ headers: headers });
+       }
+   }
 }

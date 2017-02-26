@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
-import { User } from './shared/models/user';
-import { UserService } from './shared/services/user.service';
 import { HeaderComponent } from './common/header.component';
 import mainStyles from "./main.styles";
+import {UserService} from './shared/services/index';
+import { User } from './shared/models/user';
 
 @Component({
   selector: 'main-app',
@@ -18,13 +18,11 @@ import mainStyles from "./main.styles";
   styles:[mainStyles]
 })
 export class AppComponent implements OnInit {
+    currentUser: User;
 
-  constructor(private service: UserService) {}
+    constructor(private userService: UserService) { }
 
-  ngOnInit() {
-    /*this.service.getUsers()
-      .subscribe(
-        users => this.users = users
-      );*/
-  }
+    ngOnInit() {
+        this.currentUser = this.userService.getCurrentUser();
+    }
 }
