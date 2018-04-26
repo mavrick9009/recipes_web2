@@ -26,10 +26,10 @@ export const routes: Routes = [
         path: '',
         component: Recipes.RecipesListComponent
       },
-      /*{
-        path: 'create',
-        component: UserCreateComponent
-      },*/
+      {
+        path: 'new',
+        component: Recipes.RecipesCreateComponent
+      },
       {
         path: ':id',
         component: Recipes.RecipesDetailComponent

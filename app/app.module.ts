@@ -33,6 +33,7 @@ import 'rxjs/add/operator/catch';
     Recipes.RecipesComponent,
     Recipes.RecipesListComponent,
     Recipes.RecipesDetailComponent,
+    Recipes.RecipesCreateComponent,
     Recipes.RecipesEditComponent,
     Recipes.RecipesStepComponent
   ],

@@ -28,6 +28,12 @@ export class RecipeService {
   }
 
   // create a user
+  createRecipe(recipe:Recipe) {
+    return this.http.post(this.apiUrl,{recipe: recipe}, this.jwt())
+    .map(res => res.json())
+    .catch(this.handleError);
+  }
+
 
   // update a recipe
 
